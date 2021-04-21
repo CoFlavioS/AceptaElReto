@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
  
 #define gc getchar_unlocked
  
@@ -37,21 +38,6 @@ void orden(int izq, int der, int a[]){
         orden(i, der, a);
 }
  
-int esRepdig(int num){
-    int itis = 1, i = 1, aux, fir;
- 
-    fir = num % 10;
-    num /= 10;
-    do{
-        aux = num % 10;
-        num /= 10;
-        if(fir != aux) itis = 0;
-        i++;
-    } while (itis && num!=0);
- 
-    return itis;
-}
- 
 void intToVector(int num, int aux[]) {
     int i=0;
  
@@ -68,27 +54,25 @@ int main()
  
     pru = scan_fast();
     while(pru-- > 0){
-        num = scan_fast();
-        if(esRepdig(num)){
-            iter = 8;
-        }
-        else{
-            iter = 0;
-            while(num != 6174){
-                iter++;
-                intToVector(num, aux);
-                orden(0,3,aux);
-                inv = 0;
-                num = 0;
-                for(i = 0; i < 4; i++){
-                    num = num*10 + aux[i];
-                    inv = inv*10 + aux[3-i];
-                }
-                num = inv - num;
+        num = fabs(scan_fast());
+        iter = 0;
+        while(num != 6174 && iter < 8){
+            iter++;
+            intToVector(num, aux);
+            orden(0,3,aux);
+            inv = 0;
+            num = 0;
+            for(i = 0; i < 4; i++){
+                num = num*10 + aux[i];
+                inv = inv*10 + aux[3-i];
+            }
+            num = inv - num;
+            if(num == 0){
+            	iter = 8;
+            	break;
             }
         }
         printf("%d\n", iter);
     }
- 
     return 0;
 }
