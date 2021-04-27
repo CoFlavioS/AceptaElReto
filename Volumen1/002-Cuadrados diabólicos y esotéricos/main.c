@@ -33,19 +33,29 @@ int rellenarMat(int n, int m[n][n], int* estado) {
 }
 
 int main(void) {
-	int n = scan_fast(), m[n][n], cm, estado;
+	int n = scan_fast(), cm, cm2, estado;
 
 	while (n > 0) {
 		estado = 2;
+		int m[n][n];
 		cm = rellenarMat(n, m, &estado);
 
 		if (estado == 2) {
-
+			cm2 = (4 * cm) / n;
+			if (cm2 != m[0][0] + m[0][n - 1] + m[n - 1][0] + m[n - 1][n - 1]) estado = 1;
+			if (n % 2 != 0) {
+				if (cm2 != m[0][(n - 1) / 2] + m[(n - 1) / 2][0] + m[n - 1][(n - 1) / 2] + m[(n - 1) / 2][n - 1]) estado = 1;
+				if (cm2 != 4 * m[(n - 1) / 2][(n - 1) / 2]) estado = 1;
+			}
+			else {
+				if (2 * cm2 != m[0][n / 2] + m[0][(n / 2) - 1] + m[n / 2][0] + m[(n / 2) - 1][0] + m[n - 1][n / 2] + m[n - 1][(n / 2) - 1] + m[(n / 2) - 1][n - 1] + m[(n / 2) - 1][n - 1]) estado = 1;
+				if (cm2 != m[n / 2][n / 2] + m[n / 2][(n / 2) - 1] + m[(n / 2) - 1][n / 2] + m[(n / 2) - 1][(n / 2) - 1]) estado = 1;
+			}
 		}
 
-		if (estado == 2) printf("ESOTERICO");
-		else if (estado == 1) printf("DIABOLICO");
-		else printf("NO");
+		if (estado == 2) printf("ESOTERICO\n");
+		else if (estado == 1) printf("DIABOLICO\n");
+		else printf("NO\n");
 		n = scan_fast();
 	}
 
