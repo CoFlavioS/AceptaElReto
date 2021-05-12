@@ -17,16 +17,35 @@ int scan_fast() {
 
 int rellenarMat(int n, int m[n][n], int* estado) {
 	int i, j, sum, cm = -1;
+	int num[n * n], col[n + 2];
+
+	for (i = 0; i < n * n; i++) num[i] = 0;
+	for (i = 0; i < n + 2; i++) col[i] = 0;
 
 	for (i = 0; i < n; i++) {
 		sum = 0;
 		for (j = 0; j < n; j++) {
 			m[i][j] = scan_fast();
 			sum += m[i][j];
+			col[j] += m[i][j];
+			if (i == j) col[n] += m[i][j];
+			if (i + j == n - 1) col[n + 1] += m[i][j];
 			if (*estado == 2 && (m[i][j] < 1 || m[i][j] > n * n))* estado = 1;
+			else if (m[i][j] >= 1 && m[i][j] <= n * n) {
+				if (*estado == 2 && num[m[i][j] - 1] == 1)* estado = 1;
+				num[m[i][j] - 1] = 1;
+			}
 		}
 		if (cm == -1) cm = sum;
 		if ((*estado == 2 || *estado == 1) && cm != sum)* estado = 0;
+	}
+
+	if (*estado == 2 || *estado == 1) {
+		i = 0;
+		while (i < n + 2 && cm == col[i]) {
+			i++;
+		}
+		if (i != n + 2)* estado = 0;
 	}
 
 	return cm;
